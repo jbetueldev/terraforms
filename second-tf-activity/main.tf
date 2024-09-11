@@ -82,6 +82,7 @@ resource "aws_instance" "ec2" {
                                 yum install docker -y
                                 sudo systemctl start docker
                                 sudo systemctl enable docker
+                                sudo usermod -a -G docker $(whoami)
                                 curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
                                 chmod +x /usr/local/bin/docker-compose
                               EOF
