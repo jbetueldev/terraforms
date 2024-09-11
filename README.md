@@ -1,5 +1,5 @@
 ## AWS with Terraform Sample
-fetch
+
 Create an AWS environment, together with its infrastructure resources (e.g. VPC, subnets, EC2 Instances) using Terraform as IaC.
 
 ## Setup
