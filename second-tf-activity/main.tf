@@ -71,7 +71,7 @@ resource "aws_instance" "ec2" {
   ami                    = "ami-066784287e358dad1"
   instance_type          = "t2.micro"
   subnet_id              = aws_subnet.public_subnet.id
-  key_name               = aws_key_pair.ec2_key.id
+  key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.my-sg.id]
   user_data              = <<-EOF
                                 #!/bin/bash
@@ -82,33 +82,39 @@ resource "aws_instance" "ec2" {
                                 yum install docker -y
                                 sudo systemctl start docker
                                 sudo systemctl enable docker
-                                sudo usermod -a -G docker $(whoami)
+                                sudo usermod -a -G docker ec2-user
                                 curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
                                 chmod +x /usr/local/bin/docker-compose
                               EOF
-  
+  connection {
+      type        = "ssh"
+      user        = "ec2-user"
+      private_key = file("${var.key_name}.pem")
+      host        = self.public_ip
+  }
+
   provisioner "file" {
     source      = "/home/bulbasaur/.ssh/id_rsa"
     destination = "/home/ec2-user/.ssh/id_rsa"
-       
-    connection {
-      type        = "ssh"
-      user        = "ec2-user"
-      private_key = local_file.pem_file.content
-      host        = self.public_ip
-    }
   }
 
   provisioner "file" {
     source      = "/home/bulbasaur/.ssh/id_rsa.pub"
     destination = "/home/ec2-user/.ssh/id_rsa.pub"
-       
-    connection {
-      type        = "ssh"
-      user        = "ec2-user"
-      private_key = local_file.pem_file.content
-      host        = self.public_ip
-    }
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod 400 /home/ec2-user/.ssh/id_rsa",
+      "ssh-keyscan -t rsa github.com >> /home/ec2-user/.ssh/known_hosts",
+    ]
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sleep 15",
+      "git clone git@github.com:jbetueldev/PCC-todo-sample-app.git",
+    ]
   }
 
   tags = {
@@ -116,21 +122,6 @@ resource "aws_instance" "ec2" {
   }
 }
 
-resource "tls_private_key" "tf-ssh-key" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-
-resource "local_file" "pem_file" {
-  content         = tls_private_key.tf-ssh-key.private_key_pem
-  filename        = "tf-ssh-key.pem"
-  file_permission = "0400"
-}
-
-resource "aws_key_pair" "ec2_key" {
-  public_key = tls_private_key.tf-ssh-key.public_key_openssh
-}
-
 output "Connect_to_nodejs-mysql-us-east-1a" {
-  value = "ssh -i tf-ssh-key.pem ec2-user@${aws_instance.ec2.public_ip}"
+  value = "ssh -i NodeJS-MySQL-Todo.pem ec2-user@${aws_instance.ec2.public_ip}"
 }

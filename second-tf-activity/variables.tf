@@ -9,3 +9,7 @@ variable "az" {
   description = "Availability Zone"
   default     = "us-east-1a"
 }
+
+variable "key_name" {
+  default = "NodeJS-MySQL-Todo"
+}
