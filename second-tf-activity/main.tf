@@ -26,7 +26,7 @@ resource "aws_internet_gateway" "gw" {
   }
 }
 
-resource "aws_route_table" "second_rt" {
+resource "aws_route_table" "custom_rt" {
   vpc_id = aws_vpc.main.id
 
   route {
@@ -35,13 +35,13 @@ resource "aws_route_table" "second_rt" {
   }
 
   tags = {
-    Name = "2nd Route Table"
+    Name = "Custom Route Table"
   }
 }
 
 resource "aws_route_table_association" "public_subnet_asso" {
   subnet_id      = aws_subnet.public_subnet.id
-  route_table_id = aws_route_table.second_rt.id
+  route_table_id = aws_route_table.custom_rt.id
 }
 
 resource "aws_security_group" "my-sg" {
