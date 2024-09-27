@@ -89,7 +89,7 @@ resource "aws_instance" "ec2" {
   connection {
       type        = "ssh"
       user        = "ec2-user"
-      private_key = file("${var.key_name}.pem")
+      private_key = file("${var.key_name}.pem")        # AWS KEY PAIR SHOULD BE IN THE SAME FOLDER WHERE YOU RUN TERRAFORM COMMANDS
       host        = self.public_ip
   }
 
