@@ -11,5 +11,5 @@ variable "az" {
 }
 
 variable "key_name" {
-  default = "NodeJS-MySQL-Todo"
+  default = "NodeJS-MySQL-Todo"          # AWS KEY PAIR SHOULD BE IN THE SAME FOLDER WHERE YOU RUN TERRAFORM COMMANDS
 }
