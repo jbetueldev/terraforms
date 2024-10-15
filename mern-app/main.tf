@@ -60,21 +60,6 @@ resource "aws_route_table_association" "private_subnet_asso" {
   route_table_id = aws_route_table.private_rt.id
 }
 
-
-
-
-
-# Route table entry to forward traffic from Private subnet to NAT instance
-resource "aws_route" "outbound_nat_route" {
-  route_table_id         = aws_route_table.private_rt.id
-  destination_cidr_block = "0.0.0.0/0"
-  network_interface_id   = aws_instance.nat_instance.primary_network_interface_id
-}
-
-
-
-
-
 resource "aws_lb_target_group" "backend_tg" {
   name     = "backend-TG"
   port     = 5000
@@ -83,7 +68,7 @@ resource "aws_lb_target_group" "backend_tg" {
 }
 
 resource "aws_lb_target_group_attachment" "backend_attach" {
-  count = 3
+  count            = 3
   target_group_arn = aws_lb_target_group.backend_tg.arn
   target_id        = aws_instance.backend_instance[count.index].id
   port             = 5000
@@ -106,8 +91,8 @@ resource "aws_lb" "public_nlb" {
   name               = "Public-NLB"
   internal           = false
   load_balancer_type = "network"
-  security_groups = [aws_security_group.public_nlb_sg.id]
-  subnets = [aws_subnet.public_subnet.id]
+  security_groups    = [aws_security_group.public_nlb_sg.id]
+  subnets            = [aws_subnet.public_subnet.id]
 }
 
 resource "aws_lb_listener" "backend_listener" {
@@ -140,7 +125,7 @@ resource "aws_s3_bucket" "image_gallery_bucket" {
 }
 
 resource "aws_s3_bucket_public_access_block" "bucket_access" {
-  bucket = aws_s3_bucket.image_gallery_bucket.id
+  bucket                  = aws_s3_bucket.image_gallery_bucket.id
   block_public_acls       = false
   block_public_policy     = false
   ignore_public_acls      = false

@@ -18,10 +18,10 @@ resource "aws_instance" "nat_instance" {
                                 sudo service iptables save
                               EOF
   connection {
-    type = "ssh"
-    user = "ec2-user"
+    type        = "ssh"
+    user        = "ec2-user"
     private_key = file("${var.key_name}.pem")
-    host = self.public_ip
+    host        = self.public_ip
   }
   provisioner "file" {
     source      = "./id_rsa"
@@ -41,4 +41,11 @@ resource "aws_instance" "nat_instance" {
   tags = {
     Name = "NAT-instance"
   }
+}
+
+# Route table entry to forward traffic from Private subnet to NAT instance
+resource "aws_route" "outbound_nat_route" {
+  route_table_id         = aws_route_table.private_rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  network_interface_id   = aws_instance.nat_instance.primary_network_interface_id
 }
