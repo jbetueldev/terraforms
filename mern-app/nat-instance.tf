@@ -43,6 +43,11 @@ resource "aws_instance" "nat_instance" {
   }
 }
 
+output "nat_instance_ip" {
+  value       = aws_instance.nat_instance.public_ip
+  description = "NAT instance Public IP address."
+}
+
 # Route table entry to forward traffic from Private subnet to NAT instance
 resource "aws_route" "outbound_nat_route" {
   route_table_id         = aws_route_table.private_rt.id
