@@ -132,7 +132,7 @@ resource "aws_security_group" "backend_sg" {
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
-    security_groups = [aws_security_group.nat_sg.id]
+    security_groups = [aws_security_group.nat_sg.id] # from Jump Host (NAT-instance)
   }
   ingress {
     from_port       = 5000
@@ -162,7 +162,7 @@ resource "aws_security_group" "database_sg" {
     from_port       = 22
     to_port         = 22
     protocol        = "tcp"
-    security_groups = [aws_security_group.nat_sg.id]
+    security_groups = [aws_security_group.nat_sg.id] # from Jump Host (NAT-instance)
   }
   ingress {
     from_port       = 27017

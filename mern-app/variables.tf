@@ -25,5 +25,5 @@ variable "instance_type" {
 }
 
 variable "key_name" {
-  default = "MERN"
+  default = "MERN"                  # Replace it with your AWS Key Pair name
 }
