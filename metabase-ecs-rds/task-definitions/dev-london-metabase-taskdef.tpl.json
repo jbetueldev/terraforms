@@ -1,0 +1,75 @@
+[
+    {
+      "name" : "metabase",
+      "image" : "${app_image}",
+      "cpu" : 0,
+      "portMappings" : [
+        {
+          "name" : "metabase-3000-tcp",
+          "containerPort" : ${app_port},
+          "hostPort" : ${app_port},
+          "protocol" : "tcp",
+          "appProtocol" : "http"
+        }
+      ],
+      "essential" : true,
+      "environment" : [
+        {
+          "name" : "MB_DB_DBNAME",
+          "value" : "metabase_db"
+        },
+        {
+          "name" : "MB_DB_HOST",
+          "value" : "${rds_host}"
+        },
+        {
+          "name" : "MB_DB_PORT",
+          "value" : "5432"
+        },
+        {
+          "name" : "MB_DB_TYPE",
+          "value" : "postgres"
+        },
+        {
+          "name" : "MB_DB_USER",
+          "value" : "postgres"
+        },
+        {
+           "name" : "MB_SITE_URL",
+           "value" : "${app_url}"
+        }
+      ],
+      "environmentFiles" : [],
+      "mountPoints" : [],
+      "volumesFrom" : [],
+      "secrets" : [
+        {
+          "name" : "MB_DB_PASS",
+          "valueFrom" : "${secret_arn}:password::"
+        }
+      ],
+      "ulimits" : [],
+      "logConfiguration" : {
+        "logDriver" : "awslogs",
+        "options" : {
+          "awslogs-group" : "/ecs/dev-london-metabase-taskdef",
+          "mode" : "non-blocking",
+          "awslogs-create-group" : "true",
+          "max-buffer-size" : "25m",
+          "awslogs-region" : "${aws_region}",
+          "awslogs-stream-prefix" : "ecs"
+        },
+        "secretOptions" : []
+      },
+      "healthCheck" : {
+        "command" : [
+          "CMD-SHELL",
+          "curl -f http://localhost:3000/api/health || exit 1"
+        ],
+        "interval" : 30,
+        "timeout" : 10,
+        "retries" : 5
+      },
+      "systemControls" : []
+    }
+]
