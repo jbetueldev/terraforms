@@ -11,21 +11,42 @@ The static websites can be accessed thru the Cloudfront distribution domain name
 
 ### Architecture Diagram:
 
-![alt text](/images/diagram.png)
+![alt text](https://github.com/jbetueldev/terraforms/blob/main/s3-cloudfront/images/diagram.png)
 
 ### Step 1: Create an S3 bucket with unique name and host static website by uploading files
 
-./modules/s3-static-website/main.tf
+[s3_website module](modules/s3-static-website/main.tf)
 
 ### Step 2: Create a cloudfront distribution 
 
-./modules/cloud-front/main.tf
+[cloud_front module](modules/cloud-front/main.tf)
 
 ### Step 3: Update S3 Bucket policy to allow access from cloudfront 
 
-./modules/s3-cf-policy/main.tf
+[s3_cf_policy_primary module](modules/s3-cf-policy/main.tf)
 
-### Terraform Apply Output:
+### Step 4: Edit the corresponding default values in [variables.tf](variables.tf)
+
+### Step 5: Create ```terraform.tfvars``` file
+```
+# terraform.tfvars
+aws_access_key = "<YOUR-AWS-IAM-USER-CREDENTIALS>"
+aws_secret_key = "<YOUR-AWS-IAM-USER-CREDENTIALS>"
+aws_region     = "<AWS-REGION-TO-USE>"
+```
+
+### Step 6: Run Terraform commands
+```
+terraform init
+```
+```
+terraform plan
+```
+```
+terraform apply
+```
+
+Terraform Apply Output:
 ```
 Apply complete! Resources: 11 added, 0 changed, 0 destroyed.
 
@@ -38,42 +59,35 @@ s3_bucket_name = "dev-london-h0us3-g4m3s-fr0nt3nd"
 
 S3 Bucket
 
-![alt text](/images/s3bucket.png)
+![alt text](https://github.com/jbetueldev/terraforms/blob/main/s3-cloudfront/images/s3bucket.png)
 
 Block public access:
 
-![alt text](/images/s3blockpublicaccess.png)
-
-Static Website setting:
-
-![alt text](/images/s3staticweb.png)
+![alt text](https://github.com/jbetueldev/terraforms/blob/main/s3-cloudfront/images/s3blockpublicaccess.png)
 
 CloudFront Distribution:
 
-![alt text](/images/cfdist.png)
+![alt text](https://github.com/jbetueldev/terraforms/blob/main/s3-cloudfront/images/cfdist.png)
 
 CloudFront Distribution Origin as S3 with Origin Access Control OAC:
 
-![alt text](/images/s3oac.png)
+![alt text](https://github.com/jbetueldev/terraforms/blob/main/s3-cloudfront/images/s3oac.png)
 
 S3 Bucket Policy to allow access from cloudfront 
 
-![alt text](/images/s3policy.png)
+![alt text](https://github.com/jbetueldev/terraforms/blob/main/s3-cloudfront/images/s3policy.png)
+
+### Step 7: (TEST) Upload the test file [index.html](test/index.html) to the S3 bucket
+```
+aws s3 cp --recursive ./test s3://dev-london-h0us3-g4m3s-fr0nt3nd/dice
+```
 
 Using cloudfront domain name to access S3 static website
-
-![alt text](/images/website1.png)
-
-### Terraform Destroy Output:
 ```
-Destroy complete! Resources: 9 destroyed.
+http://d1omkdrv4lqs4x.cloudfront.net/dice/index.html
 ```
 
-### Notes:
-1. Cache Invalidation can be forced from console for a cloudfront distribution
-2. Deprecated Origin Access Identity OAI also can be used instead of Origin Access Cotnrol OAC
+![alt text](https://github.com/jbetueldev/terraforms/blob/main/s3-cloudfront/images/website.png)
 
-### Test:
- ```
- aws s3 cp --recursive ./test s3://dev-london-h0us3-g4m3s-fr0nt3nd/dice
- ```
+> [!NOTE]
+> Cache Invalidation can be forced from console for a cloudfront distribution
