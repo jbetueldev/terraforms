@@ -4,10 +4,6 @@
 #   statuses = ["ISSUED"]
 # }
 
-data "aws_s3_bucket" "selected_bucket" {
-  bucket = var.bucket_id
-}
-
 ####################################################
 # Create AWS Cloudfront distribution
 ####################################################
