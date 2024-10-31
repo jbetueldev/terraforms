@@ -52,7 +52,7 @@
       "logConfiguration" : {
         "logDriver" : "awslogs",
         "options" : {
-          "awslogs-group" : "/ecs/dev-london-metabase-taskdef",
+          "awslogs-group" : "/ecs/${environment}-${location}-metabase-taskdef",
           "mode" : "non-blocking",
           "awslogs-create-group" : "true",
           "max-buffer-size" : "25m",
