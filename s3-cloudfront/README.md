@@ -1,13 +1,13 @@
-# Deploying a cloudfront distribution for S3 Static Website using terraform
-Deploying a cloudfront distribution for S3 Static Website using terraform
+# Deploying a Cloudfront distribution for S3 Static Websites using Terraform
 
-Amazon CloudFront is a web service that speeds up distribution of your static and dynamic web content, such as .html, .css, .js, and image files, to your users. CloudFront delivers your content through a worldwide network of data centers called edge locations. When a user requests content that you're serving with CloudFront, the request is routed to the edge location that provides the lowest latency (time delay), so that content is delivered with the best possible performance.
+The frontend applications for the following ```RAZED House Games``` will be hosted on an AWS S3 bucket:
+- Dice
+- Keno
+- Limbo
+- Mines
+- Plinko
 
-If the content is already in the edge location with the lowest latency, CloudFront delivers it immediately.
-
-If the content is not in that edge location, CloudFront retrieves it from an origin that you've defined—such as an Amazon S3 bucket, a MediaPackage channel, or an HTTP server (for example, a web server) that you have identified as the source for the definitive version of your content.
-
-CloudFront speeds up the distribution of your content by routing each user request through the AWS backbone network to the edge location that can best serve your content.
+The static websites can be accessed thru the Cloudfront distribution domain name, as well as the alternate domain name. 
 
 ### Architecture Diagram:
 
@@ -15,9 +15,15 @@ CloudFront speeds up the distribution of your content by routing each user reque
 
 ### Step 1: Create an S3 bucket with unique name and host static website by uploading files
 
+./modules/s3-static-website/main.tf
+
 ### Step 2: Create a cloudfront distribution 
 
+./modules/cloud-front/main.tf
+
 ### Step 3: Update S3 Bucket policy to allow access from cloudfront 
+
+./modules/s3-cf-policy/main.tf
 
 ### Terraform Apply Output:
 ```
@@ -25,7 +31,9 @@ Apply complete! Resources: 11 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-cloudfront_domain_name = "http://d1rwkmekbjnbkd.cloudfront.net"
+alternate_domain_name = "http://house-games-dev.razed.com"
+cloudfront_domain_name = "http://d1omkdrv4lqs4x.cloudfront.net"
+s3_bucket_name = "dev-london-h0us3-g4m3s-fr0nt3nd"
 ```
 
 S3 Bucket
@@ -65,6 +73,7 @@ Destroy complete! Resources: 9 destroyed.
 1. Cache Invalidation can be forced from console for a cloudfront distribution
 2. Deprecated Origin Access Identity OAI also can be used instead of Origin Access Cotnrol OAC
 
-### Resources:
-
-AWS CloudFront: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html
+### Test:
+ ```
+ aws s3 cp --recursive ./test s3://dev-london-h0us3-g4m3s-fr0nt3nd/dice
+ ```
