@@ -13,42 +13,42 @@ variable "aws_region" {
 variable "bucket_name" {
   type        = string
   description = "Name of the S3 Bucket"
-  default     = "h0us3-g4m3s-fr0nt3nd"
+  default     = "5h33n4-k3v1n-w3dd1ng-1nv1t4t10n"
 }
 
-variable "s3_objects" {
-  type        = list(string)
-  description = "Initial Folders inside S3 Bucket"
-  default = ["dice/commits/",
-    "keno/commits/",
-    "mines/commits/",
-    "limbo/commits/",
-    "plinko/commits/"
-  ]
-}
+# variable "s3_objects" {
+#   type        = list(string)
+#   description = "Initial Folders inside S3 Bucket"
+#   default = ["dice/commits/",
+#     "keno/commits/",
+#     "mines/commits/",
+#     "limbo/commits/",
+#     "plinko/commits/"
+#   ]
+# }
 
 variable "app" {
   type        = string
   description = "Application name for resource tagging"
-  default     = "house games"
+  default     = "wedding"
 }
 
 variable "domain" {
   type        = string
   description = "Domain name for resource tagging"
-  default     = "razed"
+  default     = "wow_majek"
 }
 
 variable "environment" {
   type        = string
   description = "Environment for deployment"
-  default     = "dev"
+  default     = "prod"
 }
 
 variable "location" {
   type        = string
   description = "Location for deployment"
-  default     = "london"
+  default     = "nvirginia"
 }
 
 variable "alias" {

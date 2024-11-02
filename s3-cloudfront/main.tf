@@ -6,7 +6,7 @@ module "s3_website" {
   bucket_name = var.bucket_name
   environment = var.environment
   location    = var.location
-  s3_objects  = var.s3_objects
+  # s3_objects  = var.s3_objects
   common_tags = local.common_tags
 }
 
@@ -17,6 +17,7 @@ module "cloud_front" {
   source                 = "./modules/cloud-front"
   bucket_id              = module.s3_website.static_website_id
   bucket_regional_domain = module.s3_website.static_website_regional_domain_name
+  alias = var.alias
   common_tags            = local.common_tags
 }
 

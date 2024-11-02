@@ -25,6 +25,10 @@ resource "aws_cloudfront_distribution" "cf-dist" {
     origin_access_control_id = aws_cloudfront_origin_access_control.cf-s3-oac.id
   }
 
+  comment = "${var.alias} distribution"
+
+  # aliases = [var.alias]
+
   default_cache_behavior {
     cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
     viewer_protocol_policy = "redirect-to-https"

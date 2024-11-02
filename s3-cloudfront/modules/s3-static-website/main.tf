@@ -23,11 +23,11 @@ resource "aws_s3_bucket_public_access_block" "static_site_bucket_public_access" 
 ####################################################
 # Create initial folders inside the bucket
 ####################################################
-resource "aws_s3_object" "initial_folders" {
-  bucket = aws_s3_bucket.s3_static_website.id
-  key    = element(var.s3_objects, count.index)
-  count  = length(var.s3_objects)
-}
+# resource "aws_s3_object" "initial_folders" {
+#   bucket = aws_s3_bucket.s3_static_website.id
+#   key    = element(var.s3_objects, count.index)
+#   count  = length(var.s3_objects)
+# }
 
 ####################################################
 # Enable bucket versioning
