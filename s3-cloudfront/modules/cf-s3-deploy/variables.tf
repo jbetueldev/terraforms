@@ -1,16 +1,13 @@
-variable "bucket_id" {}
-
-variable "bucket_regional_domain" {}
-
-variable "alias" {}
+variable "bucket_name" {}
 
 variable "environment" {}
 
 variable "location" {}
 
+variable "s3_objects" {}
+
 variable "app" {}
 
 variable "domain" {}
 
-
-
+variable "alias" {}

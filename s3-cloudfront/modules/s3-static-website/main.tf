@@ -3,9 +3,13 @@
 ####################################################
 resource "aws_s3_bucket" "s3_static_website" {
   bucket = "${var.environment}-${var.location}-${var.bucket_name}"
-  tags = merge(var.common_tags, {
+  tags = {
     Name = "${var.environment}-${var.location}-${var.bucket_name}"
-  })
+    Environment = var.environment
+    Location = var.location
+    Application = var.app
+    Domain = var.domain
+  }
 }
 
 ####################################################

@@ -23,7 +23,7 @@ The static websites can be accessed thru the Cloudfront distribution domain name
 
 ### Step 3: Update S3 Bucket policy to allow access from cloudfront 
 
-[s3_cf_policy_primary module](modules/s3-cf-policy/main.tf)
+[s3_cf_policy module](modules/s3-cf-policy/main.tf)
 
 ### Step 4: Edit the corresponding default values in [variables.tf](variables.tf)
 

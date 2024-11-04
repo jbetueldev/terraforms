@@ -1,32 +1,13 @@
 ####################################################
-# Create S3 Static Website
+# Deploy a Cloudformation dist for S3 static website
 ####################################################
-module "s3_website" {
-  source      = "./modules/s3-static-website"
+module "cf_s3_deploy" {
+  source      = "./modules/cf-s3-deploy"
   bucket_name = var.bucket_name
+  s3_objects  = var.s3_objects
   environment = var.environment
   location    = var.location
-  s3_objects  = var.s3_objects
-  common_tags = local.common_tags
+  app         = var.app
+  domain      = var.domain
+  alias       = var.alias
 }
-
-####################################################
-# Create AWS Cloudfront distribution
-####################################################
-module "cloud_front" {
-  source                 = "./modules/cloud-front"
-  bucket_id              = module.s3_website.static_website_id
-  bucket_regional_domain = module.s3_website.static_website_regional_domain_name
-  common_tags            = local.common_tags
-}
-
-####################################################
-# S3 bucket policy to allow access from cloudfront
-####################################################
-module "s3_cf_policy_primary" {
-  source                      = "./modules/s3-cf-policy"
-  bucket_id                   = module.s3_website.static_website_id
-  bucket_arn                  = module.s3_website.static_website_arn
-  cloudfront_distribution_arn = module.cloud_front.cloudfront_distribution_arn
-}
-
